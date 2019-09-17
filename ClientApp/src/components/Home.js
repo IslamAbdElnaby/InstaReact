@@ -67,7 +67,6 @@ class Home extends Component {
         comments: [],
         date: ""
       };
-      // console.log(post);
       await this.props.addPost(post);
     }
   };
