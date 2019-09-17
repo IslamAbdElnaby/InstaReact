@@ -64,8 +64,7 @@ class Profile extends Component {
   renderFollwing = () => {
     const username = localStorage.getItem("name");
     const { name, id } = this.props.profile;
-    if (username === name)
-      return <button className="btn btn-info">Edit profile</button>;
+    if (username === name) return <div></div>;
     return (
       <button
         className="btn btn-info"

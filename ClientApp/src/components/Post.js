@@ -124,7 +124,9 @@ class Post extends Component {
               </span>
             </span>
 
-            <span className="btn fa fa-lg fa-comment"></span>
+            <span className="btn fa fa-lg fa-comment-o">
+              {post.comments.length === 0 ? "" : post.comments.length}
+            </span>
           </div>
           <div className="row">
             <Link to={`/profile/${this.state.user.name}`} className="link-dark">

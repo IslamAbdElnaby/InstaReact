@@ -13,7 +13,6 @@ export const getFollowing = async userId => {
     return { ...f, follow: true };
   });
 };
-
 export const getFollowers = async userId => {
   const res = await axios.get(`api/Profile/GetFollowers/${userId}`);
   const followers = await res.data;
@@ -30,6 +29,7 @@ export const isFollowing = async (followerId, userId) => {
   );
   return isFollow.data;
 };
+
 export const actionCreators = {
   getProfile: username => async dispatch => {
     const res = await axios.get(`api/Profile/${username}`);
