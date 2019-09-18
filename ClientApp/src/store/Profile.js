@@ -9,16 +9,22 @@ export const PROFILE_LIKE = "PROFILE_LIKE";
 export const getFollowing = async userId => {
   const res = await axios.get(`api/Profile/GetFollowing/${userId}`);
   const following = await res.data;
-  return following.map(f => {
-    return { ...f, follow: true };
-  });
+  const appUser = await getAppUserById(localStorage.getItem("id"));
+  for (let index = 0; index < following.length; index++) {
+    const f = following[index];
+    const a = await isFollowing(appUser.id, f.id);
+    // console.log(appUser.name + " " + a + " " + f.name);
+    following[index] = { ...f, follow: a };
+  }
+  return following;
 };
 export const getFollowers = async userId => {
   const res = await axios.get(`api/Profile/GetFollowers/${userId}`);
   const followers = await res.data;
+  const appUser = await getAppUserById(localStorage.getItem("id"));
   for (let index = 0; index < followers.length; index++) {
     const f = followers[index];
-    const a = await isFollowing(userId, f.id);
+    const a = await isFollowing(appUser.id, f.id);
     followers[index] = { ...f, follow: a };
   }
   return followers;
@@ -27,7 +33,7 @@ export const isFollowing = async (followerId, userId) => {
   const isFollow = await axios.get(
     `api/Profile/IsFollowing/${followerId}/${userId}`
   );
-  return isFollow.data;
+  return await isFollow.data;
 };
 
 export const actionCreators = {
@@ -61,6 +67,11 @@ export const actionCreators = {
         followerId
       }
     });
+  },
+  isFollow: userId => async dispatch => {
+    const appUser = await getAppUserById(localStorage.getItem("id"));
+    const follow = await isFollowing(appUser.id, userId);
+    dispatch({ type: ISFOLLOWING, payload: follow });
   },
   setLikeProfile: like => async dispatch => {
     const res = await axios.post(`api/home/like`, like);

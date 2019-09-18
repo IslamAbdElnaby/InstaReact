@@ -11,7 +11,7 @@ export default function configureStore(history, initialState) {
     // counter: Counter.reducer,
     // weatherForecasts: WeatherForecasts.reducer
     auth: Auth.reducer,
-    posts: Home.reducer,
+    home: Home.reducer,
     profile: Profile.reducer
   };
 

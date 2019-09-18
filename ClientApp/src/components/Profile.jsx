@@ -37,6 +37,7 @@ class Profile extends Component {
       this.props.history.go();
     }
   }
+  componentWillUnmount() {}
   renderPostModel = () => {
     return (
       <div ref="postModal" className="modal">

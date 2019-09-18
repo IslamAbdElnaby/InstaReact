@@ -14,6 +14,7 @@ import "./NavMenu.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../store/Auth";
+import Search from "./Search";
 
 class NavMenu extends React.Component {
   constructor(props) {
@@ -31,6 +32,7 @@ class NavMenu extends React.Component {
     // console.log(this.props);
   }
   componentWillMount() {}
+
   Auth = () => {
     if (this.props.loggedIn === false) {
       return (
@@ -110,11 +112,23 @@ class NavMenu extends React.Component {
           className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow "
           light
         >
-          <Container>
-            <NavbarBrand tag={nvLink} to="/">
-              <span className="fa fa-2x fa-instagram">Insta</span>
-            </NavbarBrand>
+          <Container style={{ paddingTop: "10px" }}>
+            <NavLink tag={nvLink} to="/" style={{ marginRight: "28%" }}>
+              <span
+                style={{ fontSize: "90% !important" }}
+                className="fa fa-2x fa-instagram text-dark"
+              >
+                Insta
+              </span>
+            </NavLink>
             <NavbarToggler onClick={this.toggle} className="mr-2" />
+            <Collapse
+              className="d-sm-inline-flex flex-sm-row"
+              style={{ marginRight: "2%" }}
+              navbar
+            >
+              <Search />
+            </Collapse>
             <Collapse
               className="d-sm-inline-flex flex-sm-row-reverse"
               isOpen={this.state.isOpen}

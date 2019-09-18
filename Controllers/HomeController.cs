@@ -29,6 +29,15 @@ namespace InstaReact.Controllers
             this.env = env;
         }
 
+        [HttpGet("{action}/{username}")]
+        public async Task<IEnumerable<InstaUserDTO>> SearchByName(string username)
+        {
+            var data = await context.instaUsers
+                .Where(u => u.name.StartsWith(username))
+                .ToListAsync();
+            return mapper.Map<IEnumerable<InstaUser>, IEnumerable<InstaUserDTO>>(data);
+        }
+
         [HttpPost("{action}")]
         public async Task<string> AddImage(IFormFile file)
         {

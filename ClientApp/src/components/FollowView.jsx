@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators, getFollowers } from "../store/Profile";
+import { actionCreators, getFollowers, isFollowing } from "../store/Profile";
 import { withRouter } from "react-router-dom";
 import { getAppUserById } from "../store/Auth";
 
@@ -16,37 +16,46 @@ class FollowView extends Component {
     };
   }
   componentDidMount() {
-    const { follow } = this.props.match.params;
-    this.setState({ follow });
-    if (follow === "followers") {
-      getFollowers(this.props.id).then(data => {
-        this.setState({ data });
-        setTimeout(() => {
-          this.setState({ loading: false });
-        }, 500);
-      });
-    } else {
-      this.setState({ data: this.props.following });
-      setTimeout(() => {
-        this.setState({ loading: false });
-      }, 500);
-    }
     getAppUserById(localStorage.getItem("id")).then(user =>
       this.setState({ user })
     );
+    const { follow } = this.props.match.params;
+    if (follow === "followers") {
+      getFollowers(this.props.id).then(data => {
+        setTimeout(() => {
+          this.setState({ data, follow, loading: false });
+        }, 500);
+      });
+    } else {
+      setTimeout(() => {
+        this.setState({ follow, data: this.props.following, loading: false });
+      }, 500);
+    }
   }
+  setFollow = (id, isFollow) => {
+    this.setState(state => {
+      const data = state.data.map(d => {
+        if (d.id === id) {
+          d.follow = isFollow;
+        }
+        return d;
+      });
+      return { data };
+    });
+  };
   renderFollow = d => {
-    if (d.id === this.state.user.id) return;
+    const { id, follow } = d;
+    if (id === this.state.user.id) return;
     return (
       <button
         className="btn btn-primary btn-sm"
         onClick={e => {
           e.preventDefault();
-          this.props.follow(d.id);
-          d.follow = !d.follow;
+          this.props.follow(id);
+          this.setFollow(id, !follow);
         }}
       >
-        {d.follow ? "UnFollow" : "Follow"}
+        {follow ? "UnFollow" : "Follow"}
       </button>
     );
   };
@@ -103,7 +112,7 @@ class FollowView extends Component {
                       src={d.picPath}
                       alt=""
                       className="img-thumbnail img-user-post"
-                    />{" "}
+                    />
                     {d.name}
                   </p>
                 </div>

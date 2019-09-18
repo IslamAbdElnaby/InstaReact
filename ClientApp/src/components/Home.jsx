@@ -4,7 +4,7 @@ import { actionCreators as HomeActions } from "../store/Home";
 import { actionCreators as AuthActions } from "../store/Auth";
 import { bindActionCreators } from "redux";
 import Post from "./Post";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import "../CSS/post.css";
 import axios from "axios";
 
@@ -13,6 +13,7 @@ class Home extends Component {
     super(props);
     this.state = { loading: 1, image: "", caption: "" };
   }
+  componentWillUnmount() {}
   //WARNING! To be deprecated in React v17. Use new lifecycle static getDerivedStateFromProps instead.
   componentWillReceiveProps(nextProps) {
     if (this.state.loading !== 0 && this.refs.addPostModal !== undefined) {
@@ -132,9 +133,9 @@ class Home extends Component {
   };
   render() {
     if (this.state.loading === 1) return this.loading();
-    const posts = this.props.state.posts;
+    const { posts } = this.props.state.home;
     return (
-      <div className="container" style={{ paddingBottom: 25 }}>
+      <div className="container">
         {this.renderPostModel()}
         <div className="row">
           <div className="col-sm-5"></div>

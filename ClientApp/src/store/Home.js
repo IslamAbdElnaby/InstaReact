@@ -3,8 +3,15 @@ const GET_POSTS = "GET_POSTS";
 const LIKE = "LIKE";
 const COMMENT = "COMMENT";
 const ADD_POST = "ADD_POST";
-export const initialState = [];
+const SEARCH = "SEARCH";
+const CLEAR = "CLEAR";
+export const initialState = { posts: [], users: [] };
 
+export const searchByName = async search => {
+  const res = await axios.get(`api/home/SearchByName/${search}`);
+  const users = await res.data;
+  return users;
+};
 export const actionCreators = {
   getHomePosts: id => async dispatch => {
     const res = await axios.get(`api/home/getPosts/${id}`);
@@ -26,36 +33,54 @@ export const actionCreators = {
     const id = await res.data;
     post.id = id;
     dispatch({ type: ADD_POST, payload: { post } });
+  },
+  search: search => async dispatch => {
+    let users = [];
+    if (search !== "") users = await searchByName(search);
+    dispatch({ type: SEARCH, payload: users });
+  },
+  clear: () => dispatch => {
+    dispatch({ type: CLEAR });
   }
 };
-
 export const reducer = (state = initialState, action) => {
   const { type, payload } = action;
+  const { posts } = state;
   switch (type) {
     case GET_POSTS:
-      return payload.posts;
+      return { ...state, posts: payload.posts };
     case COMMENT:
       const { comment } = payload;
-      return state.map(post => {
-        if (post.id === comment.postId) post.comments.push(comment);
-        return post;
-      });
+      return {
+        ...state,
+        posts: posts.map(post => {
+          if (post.id === comment.postId) post.comments.push(comment);
+          return post;
+        })
+      };
     case LIKE:
-      return state.map(post => {
-        const { like } = payload;
-        if (post.id == like.postId) {
-          if (like.id !== -1) {
-            post.likes.push(like);
-          } else {
-            const l = post.likes.find(a => a.userId === like.userId);
-            const idx = post.likes.indexOf(l);
-            post.likes.splice(idx, 1);
+      return {
+        ...state,
+        posts: posts.map(post => {
+          const { like } = payload;
+          if (post.id == like.postId) {
+            if (like.id !== -1) {
+              post.likes.push(like);
+            } else {
+              const l = post.likes.find(a => a.userId === like.userId);
+              const idx = post.likes.indexOf(l);
+              post.likes.splice(idx, 1);
+            }
           }
-        }
-        return post;
-      });
+          return post;
+        })
+      };
     case ADD_POST:
-      return [payload.post, ...state];
+      return { ...state, posts: [payload.post, ...posts] };
+    case SEARCH:
+      return { ...state, users: payload };
+    case CLEAR:
+      return initialState;
     default:
       return state;
   }
