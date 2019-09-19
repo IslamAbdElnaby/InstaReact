@@ -128,3 +128,14 @@
         width: 100%;
     }
 }
+
+.popover__content {
+    margin-top: 5px;
+    width: 100% !important;
+    max-height: 210px;
+    background-color: #fff !important;
+}
+
+.overflow-auto {
+    overflow-x: hidden !important;
+}

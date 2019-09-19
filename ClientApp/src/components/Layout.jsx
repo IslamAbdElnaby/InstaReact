@@ -16,6 +16,7 @@ class Layout extends Component {
     this.setState({ width: window.innerWidth });
   }
   renderSearch = () => {
+    return;
     const { users } = this.props;
     if (this.state.width <= 575) return;
     return (
@@ -68,7 +69,6 @@ class Layout extends Component {
     return (
       <div>
         <NavMenu />
-        {this.renderSearch(this.props.users)}
         <Container>{this.props.children}</Container>
       </div>
     );

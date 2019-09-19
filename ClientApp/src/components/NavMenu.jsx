@@ -105,6 +105,19 @@ class NavMenu extends React.Component {
     });
   }
 
+  renderSearch = () => {
+    if (this.props.loggedIn === false) return;
+    return (
+      <Collapse
+        className="d-sm-inline-flex flex-sm-row"
+        style={{ marginRight: "2%" }}
+        navbar
+      >
+        <Search />
+      </Collapse>
+    );
+  };
+
   render() {
     return (
       <header>
@@ -122,13 +135,7 @@ class NavMenu extends React.Component {
               </span>
             </NavLink>
             <NavbarToggler onClick={this.toggle} className="mr-2" />
-            <Collapse
-              className="d-sm-inline-flex flex-sm-row"
-              style={{ marginRight: "2%" }}
-              navbar
-            >
-              <Search />
-            </Collapse>
+            {this.renderSearch()}
             <Collapse
               className="d-sm-inline-flex flex-sm-row-reverse"
               isOpen={this.state.isOpen}
