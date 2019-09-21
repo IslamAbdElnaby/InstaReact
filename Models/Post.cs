@@ -17,10 +17,13 @@ namespace InstaReact.Models
         public virtual InstaUser instaUser { get; set; }
         public virtual ICollection<Like> likes { get; set; }
         public virtual ICollection<Comment> comments { get; set; }
+        public virtual ICollection<Notification> notifications { get; set; }
+
         public Post()
         {
             likes = new Collection<Like>();
             comments = new Collection<Comment>();
+            notifications = new Collection<Notification>();
         }
     }
 }

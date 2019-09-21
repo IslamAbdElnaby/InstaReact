@@ -5,7 +5,8 @@ const COMMENT = "COMMENT";
 const ADD_POST = "ADD_POST";
 const SEARCH = "SEARCH";
 const CLEAR = "CLEAR";
-export const initialState = { posts: [], users: [] };
+const NOTIFICATIONS = "NOTIFICATIONS";
+export const initialState = { posts: [], users: [], notifications: [] };
 
 export const searchByName = async search => {
   const res = await axios.get(`api/home/SearchByName/${search}`);
@@ -41,6 +42,11 @@ export const actionCreators = {
   },
   clear: () => dispatch => {
     dispatch({ type: CLEAR });
+  },
+  getNotifications: userId => async dispatch => {
+    const res = await axios.get(`api/home/getNotifications/${userId}`);
+    const nots = res.data;
+    dispatch({ type: NOTIFICATIONS, payload: nots });
   }
 };
 export const reducer = (state = initialState, action) => {
@@ -81,6 +87,8 @@ export const reducer = (state = initialState, action) => {
       return { ...state, users: payload };
     case CLEAR:
       return initialState;
+    case NOTIFICATIONS:
+      return { ...state, notifications: payload };
     default:
       return state;
   }

@@ -7,7 +7,6 @@ import Register from "./components/Register";
 import Profile from "./components/Profile";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import FollowView from "./components/FollowView";
 
 const App = props => {
   const { pathname } = props.history.location;
@@ -47,7 +46,6 @@ const App = props => {
         </div>
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={Register} />
-
         {renderProfile()}
       </div>
     </Layout>

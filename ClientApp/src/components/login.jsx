@@ -5,9 +5,13 @@ import { connect } from "react-redux";
 import { actionCreators } from "../store/Auth";
 import { withRouter } from "react-router-dom";
 class Login extends Component {
+  componentDidMount() {
+    if (localStorage.getItem("id") !== null) {
+      this.props.history.push("/");
+    }
+  }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.loggedIn === true) {
-      console.log(nextProps.loggedIn);
+    if (localStorage.getItem("id") !== null) {
       this.props.history.push("/");
     }
   }

@@ -16,7 +16,10 @@ class Home extends Component {
   componentWillUnmount() {}
   //WARNING! To be deprecated in React v17. Use new lifecycle static getDerivedStateFromProps instead.
   componentWillReceiveProps(nextProps) {
-    if (this.state.loading !== 0 && this.refs.addPostModal !== undefined) {
+    console.log("loading");
+    console.log(this.state.loading);
+    console.log(this.refs.addPostModal);
+    if (this.state.loading !== 0) {
       setTimeout(() => {
         this.setState({ loading: 0 });
         this.refs.addPostModal.style.display = "none";

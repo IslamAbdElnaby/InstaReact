@@ -13,6 +13,8 @@ namespace InstaReact.Models
         public DbSet<Comment> comments { get; set; }
         public DbSet<Follower> followers { get; set; }
         public DbSet<CommentLike> commentLikes { get; set; }
+        public DbSet<Notification> notifications { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

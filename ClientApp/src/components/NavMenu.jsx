@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../store/Auth";
 import Search from "./Search";
+import Notification from "./Notification";
 
 class NavMenu extends React.Component {
   constructor(props) {
@@ -61,15 +62,11 @@ class NavMenu extends React.Component {
               to="/"
             ></NavLink>
           </NavItem>
+          {/* {
           <NavItem>
-            <NavLink
-              tag={nvLink}
-              exact
-              activeClassName="text-danger"
-              className="fa fa-2x fa-heart-o"
-              to="/likes"
-            ></NavLink>
+            <Notification />
           </NavItem>
+          } */}
           <NavItem>
             <NavLink
               tag={nvLink}
@@ -87,10 +84,10 @@ class NavMenu extends React.Component {
               activeClassName="text-warning"
               className="fa fa-2x fa-sign-out"
               onClick={() => {
-                this.props.logout();
                 localStorage.removeItem("id");
                 localStorage.removeItem("name");
                 localStorage.removeItem("loggedIn");
+                this.props.logout();
               }}
             ></NavLink>
           </NavItem>

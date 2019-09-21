@@ -34,6 +34,10 @@ namespace InstaReact
             CreateMap<FollowerDTO, Follower>()
                 .ForMember(opt => opt.id, opt => opt.Ignore());
 
+            CreateMap<Notification, NotificationDTO>();
+            CreateMap<NotificationDTO, Notification>()
+                .ForMember(opt => opt.id, opt => opt.Ignore());
+
 
 
         }

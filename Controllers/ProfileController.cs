@@ -24,7 +24,7 @@ namespace InstaReact.Controllers
             this.context = context;
             this.mapper = mapper;
         }
-        // GET: api/Profile
+        
         [HttpGet("{username}")]
         public async Task<InstaUserDTO> Get(string username)
         {
@@ -91,17 +91,29 @@ namespace InstaReact.Controllers
                 await context.SaveChangesAsync();
                 return -1;
             }
-            catch { await context.followers.AddAsync(f); }
-            await context.SaveChangesAsync();
+            catch
+            {
+                await context.followers.AddAsync(f);
+                await context.SaveChangesAsync();
+                var not = new Notification()
+                {
+                    actionId = f.id,
+                    ownerUserId = f.userId,
+                    userId = f.followerId,
+                    seen = false,
+                    type = "follow"
+                };
+                await context.notifications.AddAsync(not);
+                await context.SaveChangesAsync();
+            }
             return f.id;
         }
-        // PUT: api/Profile/5
+
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

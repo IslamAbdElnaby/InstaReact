@@ -130,6 +130,19 @@ namespace InstaReact.Controllers
                 model.date = DateTime.Now;
                 await context.likes.AddAsync(model);
                 await context.SaveChangesAsync();
+                int ownerId = context.posts.Single(p => p.Id == model.postId).instaUserId;
+
+                var not = new Notification()
+                {
+                    actionId = model.Id,
+                    ownerUserId = ownerId,
+                    userId = like.userId,
+                    postId = like.postId,
+                    seen = false,
+                    type = "like"
+                };
+                await context.notifications.AddAsync(not);
+                await context.SaveChangesAsync();
                 return model.Id;
             }
         }
@@ -142,6 +155,18 @@ namespace InstaReact.Controllers
                 var model = mapper.Map<CommentDTO, Comment>(comment);
                 model.date = DateTime.Now;
                 await context.comments.AddAsync(model);
+                await context.SaveChangesAsync();
+                int ownerId = context.posts.Single(p => p.Id == model.postId).instaUserId;
+                var not = new Notification()
+                {
+                    actionId = model.Id,
+                    ownerUserId = ownerId,
+                    userId = comment.userId,
+                    postId = comment.postId,
+                    seen = false,
+                    type = "comment"
+                };
+                await context.notifications.AddAsync(not);
                 await context.SaveChangesAsync();
                 return model.Id;
             }
@@ -167,7 +192,18 @@ namespace InstaReact.Controllers
                 return model.Id;
             }
         }
-        
+
+        [HttpGet("{action}/{userId}")]
+        public async Task<IEnumerable<NotificationDTO>> getNotifications(int userId)
+        {
+            var notifications = await context.notifications
+                .Where(n => n.ownerUserId == userId)
+                .Include(n => n.user)
+                .Include(n => n.post)
+                .ToListAsync();
+            return mapper.Map<IEnumerable<Notification>, IEnumerable<NotificationDTO>>(notifications);
+        }
+
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {

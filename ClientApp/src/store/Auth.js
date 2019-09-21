@@ -30,10 +30,10 @@ export const actionCreators = {
     });
     const id = await res.data;
     if (id !== "") {
-      dispatch({ type: LOGIN, payload: { name: name, id: id } });
       localStorage.setItem("loggedIn", "1");
       localStorage.setItem("name", name);
       localStorage.setItem("id", id);
+      dispatch({ type: LOGIN, payload: { name: name, id: id } });
     } else
       dispatch({
         type: LOGIN_ERROR,
@@ -44,10 +44,10 @@ export const actionCreators = {
     const res = await axios.post("api/auth/register", user);
     const data = await res.data;
     if (data.id !== "") {
-      dispatch({ type: REGISTER, payload: { name: user.name, id: data.id } });
       localStorage.setItem("loggedIn", "1");
       localStorage.setItem("name", user.name);
       localStorage.setItem("id", data.id);
+      dispatch({ type: REGISTER, payload: { name: user.name, id: data.id } });
     } else
       dispatch({
         type: REGISTER_ERROR,

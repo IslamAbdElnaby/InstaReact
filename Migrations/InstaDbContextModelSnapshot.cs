@@ -120,6 +120,33 @@ namespace InstaReact.Migrations
                     b.ToTable("likes");
                 });
 
+            modelBuilder.Entity("InstaReact.Models.Notification", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("actionId");
+
+                    b.Property<int>("ownerUserId");
+
+                    b.Property<int>("postId");
+
+                    b.Property<bool>("seen");
+
+                    b.Property<string>("type");
+
+                    b.Property<int>("userId");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("postId");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("notifications");
+                });
+
             modelBuilder.Entity("InstaReact.Models.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -340,6 +367,19 @@ namespace InstaReact.Migrations
                 {
                     b.HasOne("InstaReact.Models.Post", "post")
                         .WithMany("likes")
+                        .HasForeignKey("postId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("InstaReact.Models.InstaUser", "user")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("InstaReact.Models.Notification", b =>
+                {
+                    b.HasOne("InstaReact.Models.Post", "post")
+                        .WithMany("notifications")
                         .HasForeignKey("postId")
                         .OnDelete(DeleteBehavior.Restrict);
 
