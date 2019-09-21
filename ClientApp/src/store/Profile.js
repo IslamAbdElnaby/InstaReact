@@ -54,22 +54,20 @@ export const actionCreators = {
   follow: userId => async dispatch => {
     const appUser = await getAppUserById(localStorage.getItem("id"));
     const followerId = appUser.id;
-    console.log(appUser);
     const res = await axios.post(`api/Profile/Follow`, {
       id: -1,
       userId,
       followerId
     });
     const id = await res.data;
-    console.log(id);
-    // dispatch({
-    //   type: FOLLOW,
-    //   payload: {
-    //     id,
-    //     userId,
-    //     followerId
-    //   }
-    // });
+    dispatch({
+      type: FOLLOW,
+      payload: {
+        id,
+        userId,
+        followerId
+      }
+    });
   },
   isFollow: userId => async dispatch => {
     const appUser = await getAppUserById(localStorage.getItem("id"));
