@@ -6,6 +6,7 @@ const ADD_POST = "ADD_POST";
 const SEARCH = "SEARCH";
 const CLEAR = "CLEAR";
 const NOTIFICATIONS = "NOTIFICATIONS";
+const DELETE = "DELETE";
 export const initialState = { posts: [], users: [], notifications: [] };
 
 export const searchByName = async search => {
@@ -47,6 +48,10 @@ export const actionCreators = {
     const res = await axios.get(`api/home/getNotifications/${userId}`);
     const nots = res.data;
     dispatch({ type: NOTIFICATIONS, payload: nots });
+  },
+  deletePost: postId => async dispatch => {
+    const res = await axios.delete(`api/home/DeletePost/${postId}`);
+    dispatch({ type: DELETE, payload: { postId } });
   }
 };
 export const reducer = (state = initialState, action) => {
@@ -89,6 +94,8 @@ export const reducer = (state = initialState, action) => {
       return initialState;
     case NOTIFICATIONS:
       return { ...state, notifications: payload };
+    case DELETE:
+      return { ...state, posts: posts.filter(p => p.id !== payload.postId) };
     default:
       return state;
   }

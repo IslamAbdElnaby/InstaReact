@@ -214,11 +214,19 @@ namespace InstaReact.Controllers
         {
             try
             {
-                var model = await context.posts.SingleAsync(p => p.Id == id);
+                var model = await context.posts
+                    .Include(p => p.likes)
+                    .Include(p => p.comments)
+                    .Include(p => p.notifications)
+                    .SingleAsync(p => p.Id == id);
+                context.comments.RemoveRange(model.comments);
+                context.likes.RemoveRange(model.likes);
+                context.notifications.RemoveRange(model.notifications);
+                await context.SaveChangesAsync();
                 context.posts.Remove(model);
                 await context.SaveChangesAsync();
             }
-            catch { }
+            catch(Exception e) { }
         }
     }
 }

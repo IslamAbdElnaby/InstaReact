@@ -101,7 +101,8 @@ namespace InstaReact.Controllers
                     ownerUserId = f.userId,
                     userId = f.followerId,
                     seen = false,
-                    type = "follow"
+                    type = "follow",
+                    postId = null
                 };
                 await context.notifications.AddAsync(not);
                 await context.SaveChangesAsync();

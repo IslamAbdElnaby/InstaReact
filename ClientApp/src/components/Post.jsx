@@ -13,7 +13,8 @@ class Post extends Component {
       heartClick: 0,
       comment: "",
       user: { name: "" },
-      appUser: {}
+      appUser: {},
+      canDelete: false
     };
   }
   componentDidMount() {
@@ -36,9 +37,11 @@ class Post extends Component {
   //WARNING! To be deprecated in React v17. Use new lifecycle static getDerivedStateFromProps instead.
   componentWillReceiveProps(nextProps) {
     try {
-      getAppUserById(nextProps.post.instaUserId).then(res =>
-        this.setState({ user: res })
-      );
+      getAppUserById(nextProps.post.instaUserId).then(res => {
+        const same =
+          this.state.user.id === this.state.appUser.id ? true : false;
+        this.setState({ user: res, canDelete: same });
+      });
       const post = nextProps.post;
       const user = this.state.appUser;
       const length = post.likes.filter(l => l.userId === user.id).length;
@@ -84,7 +87,23 @@ class Post extends Component {
       </div>
     );
   };
-
+  renderDelete = () => {
+    if (this.props.isProfile === undefined || this.props.canDelete === false)
+      return;
+    return (
+      <div
+        className="close fa fa-remove text-dark"
+        style={{ fontSize: "10px !important" }}
+        onClick={e => {
+          e.preventDefault();
+          if (window.confirm("delete it?")) {
+            this.props.deletePostProfile(this.props.post.id);
+            this.props.hidePostModal();
+          }
+        }}
+      ></div>
+    );
+  };
   render() {
     const post = this.props.post;
     if (post === undefined) return <p></p>;
@@ -96,6 +115,8 @@ class Post extends Component {
           className="col-sm-8 form-control"
           style={{ height: "auto", padding: 30 }}
         >
+          {this.renderDelete()}
+
           <div>
             <Link to={`/profile/${this.state.user.name}`} className="link-dark">
               <img

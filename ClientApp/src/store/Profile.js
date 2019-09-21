@@ -5,6 +5,7 @@ export const FOLLOW = "FOLLOW";
 export const ISFOLLOWING = "ISFOLLOWING";
 export const PROFILE_COMMENT = "PROFILE_COMMENT";
 export const PROFILE_LIKE = "PROFILE_LIKE";
+export const DELETE = "DELETE";
 
 export const getFollowing = async userId => {
   const res = await axios.get(`api/Profile/GetFollowing/${userId}`);
@@ -53,20 +54,22 @@ export const actionCreators = {
   follow: userId => async dispatch => {
     const appUser = await getAppUserById(localStorage.getItem("id"));
     const followerId = appUser.id;
+    console.log(appUser);
     const res = await axios.post(`api/Profile/Follow`, {
       id: -1,
       userId,
       followerId
     });
     const id = await res.data;
-    dispatch({
-      type: FOLLOW,
-      payload: {
-        id,
-        userId,
-        followerId
-      }
-    });
+    console.log(id);
+    // dispatch({
+    //   type: FOLLOW,
+    //   payload: {
+    //     id,
+    //     userId,
+    //     followerId
+    //   }
+    // });
   },
   isFollow: userId => async dispatch => {
     const appUser = await getAppUserById(localStorage.getItem("id"));
@@ -82,6 +85,10 @@ export const actionCreators = {
     const res = await axios.post(`api/home/comment`, comment);
     comment.id = await res.data;
     dispatch({ type: PROFILE_COMMENT, payload: { comment } });
+  },
+  deletePostProfile: postId => async dispatch => {
+    const res = await axios.delete(`api/home/DeletePost/${postId}`);
+    dispatch({ type: DELETE, payload: { postId } });
   }
 };
 
@@ -152,6 +159,8 @@ export const reducer = (state = {}, action) => {
           return post;
         })
       };
+    case DELETE:
+      return { ...state, posts: posts.filter(p => p.id !== payload.postId) };
     default:
       return state;
   }

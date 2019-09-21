@@ -38,6 +38,10 @@ class Profile extends Component {
     }
   }
   componentWillUnmount() {}
+
+  hidePostModal = () => {
+    this.refs.postModal.style.display = "none";
+  };
   renderPostModel = () => {
     return (
       <div ref="postModal" className="modal">
@@ -53,6 +57,8 @@ class Profile extends Component {
           <div className="col-md-2"></div>
           <div className="col-md-8">
             <Post
+              canDelete={this.state.username === localStorage.getItem("name")}
+              hidePostModal={this.hidePostModal}
               isProfile="1"
               className="modal-content"
               post={this.props.profile.posts[this.state.postIdx]}

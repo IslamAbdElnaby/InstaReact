@@ -16,7 +16,7 @@ namespace InstaReact.Models
         public virtual InstaUser user { get; set; }
         public int userId { get; set; }
         public virtual Post post { get; set; }
-        public int postId { get; set; }
+        public int? postId { get; set; }
         public bool seen { get; set; }
     }
 }
