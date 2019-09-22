@@ -16,10 +16,14 @@ class Home extends Component {
   componentWillUnmount() {}
   //WARNING! To be deprecated in React v17. Use new lifecycle static getDerivedStateFromProps instead.
   componentWillReceiveProps(nextProps) {
+    const id = this.props.state.auth.id;
+    this.props.getHomePosts(id);
     if (this.state.loading !== 0) {
       setTimeout(() => {
-        this.setState({ loading: 0 });
-        this.refs.addPostModal.style.display = "none";
+        try {
+          this.setState({ loading: 0 });
+          this.refs.addPostModal.style.display = "none";
+        } catch (error) {}
       }, 1000);
     }
   }

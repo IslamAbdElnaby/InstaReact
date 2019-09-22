@@ -131,7 +131,7 @@
 
 .popover__content {
     margin-top: 5px;
-    width: 100% !important;
+    width: 400px !important;
     max-height: 210px;
     background-color: #fff !important;
 }

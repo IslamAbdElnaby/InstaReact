@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { actionCreators } from "../store/Home";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import Popover from "@terebentina/react-popover";
 import "@terebentina/react-popover/lib/styles.css";
 
 class Search extends Component {
@@ -13,14 +12,15 @@ class Search extends Component {
     if (users === undefined) return;
     return (
       <div
-        className="overflow-auto"
         style={{
           height: "150px",
-          maxHeight: "150px"
+          maxHeight: "150px",
+          overflow: "auto !important",
+          overflowX: "hidden !important"
         }}
       >
         {users.map(user => (
-          <div className="row" key={user.id} style={{ paddingLeft: "15%" }}>
+          <div className="row" key={user.id} style={{ paddingLeft: "5%" }}>
             <Link to={`/profile/${user.name}`}>
               <img
                 style={{ height: "40px", width: "40px" }}

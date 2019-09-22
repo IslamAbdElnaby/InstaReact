@@ -62,11 +62,17 @@ class NavMenu extends React.Component {
               to="/"
             ></NavLink>
           </NavItem>
-          {/* {
           <NavItem>
-            <Notification />
+            <NavLink
+              tag={nvLink}
+              to={"#"}
+              style={{
+                display: this.state.isOpen !== false ? "none" : "block"
+              }}
+            >
+              <Notification />
+            </NavLink>
           </NavItem>
-          } */}
           <NavItem>
             <NavLink
               tag={nvLink}
