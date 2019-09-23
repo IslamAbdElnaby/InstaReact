@@ -100,6 +100,7 @@ export const reducer = (state = {}, action) => {
       const { id, followerId, userId } = payload;
       const { followers, following } = state;
       const profId = state.id;
+      console.log({ profId, followerId, userId });
       if (id === -1) {
         if (profId === userId) {
           return {
@@ -107,6 +108,10 @@ export const reducer = (state = {}, action) => {
             followers: followers.filter(
               f => !(f.userId === userId && f.followerId === followerId)
             ),
+            following: following.map(f => {
+              if (followerId === f.followerId) f.follow = false;
+              return f;
+            }),
             follow: false
           };
         } else if (profId === followerId) {
@@ -114,7 +119,16 @@ export const reducer = (state = {}, action) => {
             ...state,
             following: following.filter(f => f.id !== userId)
           };
-        } else return state;
+        } else {
+          console.log("UNFOLLOW");
+          return {
+            ...state,
+            following: following.map(f => {
+              if (userId === f.id) f.follow = false;
+              return f;
+            })
+          };
+        }
       } else {
         if (profId === userId) {
           return {
@@ -127,7 +141,16 @@ export const reducer = (state = {}, action) => {
             ...state,
             following: [...following, payload]
           };
-        } else return state;
+        } else {
+          console.log("FOLLOW");
+          return {
+            ...state,
+            following: following.map(f => {
+              if (userId === f.id) f.follow = true;
+              return f;
+            })
+          };
+        }
       }
     case ISFOLLOWING:
       return { ...state, follow: payload };
