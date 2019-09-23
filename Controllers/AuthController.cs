@@ -89,7 +89,8 @@ namespace InstaReact.Controllers
                 {
                     IdentityId = newUser.Id,
                     email = newUser.Email,
-                    name = newUser.UserName
+                    name = newUser.UserName,
+                    picPath = "salah.jpg"
                 };
                 await context.instaUsers.AddAsync(model);
                 await context.SaveChangesAsync();
