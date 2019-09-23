@@ -6,7 +6,7 @@ import { bindActionCreators } from "redux";
 import "@terebentina/react-popover/lib/styles.css";
 
 class Search extends Component {
-  state = { active: 0 };
+  state = { active: 0, blur: 0 };
   renderSearchUsers = () => {
     const users = this.props.users;
     if (users === undefined) return;
@@ -37,7 +37,8 @@ class Search extends Component {
   };
   componentWillReceiveProps(nextProps) {
     const users = nextProps.users;
-    if (users !== undefined && users.length > 0) this.setState({ active: 1 });
+    if (this.state.blur !== 1 && users !== undefined && users.length > 0)
+      this.setState({ active: 1 });
     else this.setState({ active: 0 });
   }
   render() {
@@ -58,6 +59,14 @@ class Search extends Component {
                   e.preventDefault();
                   const s = e.target.value.trim();
                   this.props.search(s);
+                }}
+                onBlur={e => {
+                  e.preventDefault();
+                  this.setState({ blur: 1 });
+                }}
+                onFocus={e => {
+                  e.preventDefault();
+                  this.setState({ blur: 0 });
                 }}
               />
               <div className="popover__content">{this.renderSearchUsers()}</div>
