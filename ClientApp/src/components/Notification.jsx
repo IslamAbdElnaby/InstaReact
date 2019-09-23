@@ -9,15 +9,24 @@ import { getAppUserById } from "../store/Auth";
 class Notification extends Component {
   constructor(props) {
     super(props);
+    // this.heartRef = React.createRef();
+    this.onBlur = this.onBlur.bind(this);
     this.state = {
       active: 0,
       user: {}
     };
   }
+  onBlur() {
+    this.setState({ active: 0 });
+  }
   componentDidMount() {
+    this.heartRef.addEventListener("blur", this.onBlur);
     getAppUserById(localStorage.getItem("id")).then(user => {
       this.setState({ user });
     });
+  }
+  componentWillUnmount() {
+    this.heartRef.removeEventListener("blur", this.onBlur);
   }
 
   getTextType = type => {
@@ -86,16 +95,19 @@ class Notification extends Component {
         className={`popover popover--bottom ${this.state.active &&
           "popover--active"}`}
       >
-        <span
-          type="text"
-          className="fa fa-2x fa-heart-o popover__trigger"
+        <a
+          href="#"
+          className="text-dark"
           onClick={e => {
             e.preventDefault();
             this.setState({ active: !this.state.active });
             if (this.props.notifications.length === 0)
               this.props.getNotifications(this.state.user.id);
           }}
-        />
+          ref={heart => (this.heartRef = heart)}
+        >
+          <span className="fa fa-2x fa-heart-o popover__trigger"></span>
+        </a>
         <div className="popover__content">{this.renderNotifications()}</div>
       </div>
     );
